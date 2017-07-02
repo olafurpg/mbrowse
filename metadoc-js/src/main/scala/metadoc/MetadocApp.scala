@@ -24,14 +24,13 @@ object MetadocApp extends js.JSApp {
     } {
       // 1. Load editor
       val editor = openEditor(index)
+
+      // 2. Open initial file.
       val filename = index.files.find(_.endsWith("Doc.scala")).get
       for {
-        attrs <- MetadocAttributeService.fetchsAttributes(filename)
+        model <- MetadocTextModelService.modelReference(filename)
       } yield {
-        val model =
-          MetadocTextModelService.createModel(attrs.contents, attrs.filename)
-        // 2. Open intial file.
-        editor.setModel(model)
+        editor.setModel(model.`object`.textEditorModel)
       }
     }
   }
@@ -62,7 +61,7 @@ object MetadocApp extends js.JSApp {
     )
 
     val options = jsObject[IEditorConstructionOptions]
-    options.readOnly = true
+//    options.readOnly = true
     val overrides = jsObject[IEditorOverrideServices]
     val editorService = new MetadocEditorService
     overrides.textModelResolverService = MetadocTextModelService

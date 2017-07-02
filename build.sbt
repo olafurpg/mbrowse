@@ -51,6 +51,8 @@ lazy val example = project
   .settings(
     testDependencies,
     noPublish,
+    scalacOptions += "-Xlint",
+    scalacOptions += "-Ywarn-unused-import",
     test := {} // no need to run paiges tests.
   )
 
