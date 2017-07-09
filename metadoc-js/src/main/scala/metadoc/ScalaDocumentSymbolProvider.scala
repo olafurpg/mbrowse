@@ -13,6 +13,8 @@ import monaco.languages.DocumentSymbolProvider
 import monaco.languages.SymbolInformation
 import monaco.languages.SymbolKind
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.scalajs.js.Array
+import monaco.Thenable
 
 @ScalaJSDefined
 class ScalaDocumentSymbolProvider(index: Index)
@@ -20,7 +22,7 @@ class ScalaDocumentSymbolProvider(index: Index)
   override def provideDocumentSymbols(
       model: IReadOnlyModel,
       token: CancellationToken
-  ) = {
+  ): Thenable[Array[SymbolInformation]] = {
     for {
       attrs <- MetadocAttributeService.fetchAttributes(model.uri.path)
     } yield {

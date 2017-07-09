@@ -2305,13 +2305,13 @@ package languages {
     ): Definition | Thenable[Definition] = js.native
   }
 
-  @js.native
+  @ScalaJSDefined
   trait TypeDefinitionProvider extends js.Object {
     def provideTypeDefinition(
         model: editor.IReadOnlyModel,
         position: Position,
         token: CancellationToken
-    ): Definition | Thenable[Definition] = js.native
+    ): Thenable[Definition]
   }
 
   @js.native

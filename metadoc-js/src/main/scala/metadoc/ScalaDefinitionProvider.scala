@@ -4,6 +4,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.meta._
 import scala.scalajs.js
+import scala.scalajs.js.Array
 import scala.scalajs.js.annotation._
 import metadoc.schema.Index
 import monaco.editor.IReadOnlyModel
@@ -11,6 +12,7 @@ import monaco.languages.DefinitionProvider
 import monaco.languages.Location
 import monaco.CancellationToken
 import monaco.Position
+import monaco.Thenable
 
 @ScalaJSDefined
 class ScalaDefinitionProvider(index: Index) extends DefinitionProvider {
@@ -18,7 +20,7 @@ class ScalaDefinitionProvider(index: Index) extends DefinitionProvider {
       model: IReadOnlyModel,
       position: Position,
       token: CancellationToken
-  ) = {
+  ): Thenable[Array[Location]] = {
     val offset = model.getOffsetAt(position).toInt
     for {
       attrs <- MetadocAttributeService.fetchAttributes(model.uri.path)

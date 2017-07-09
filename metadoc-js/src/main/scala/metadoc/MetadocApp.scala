@@ -72,6 +72,10 @@ object MetadocApp extends js.JSApp {
       ScalaLanguageExtensionPoint.id,
       new ScalaDocumentSymbolProvider(index)
     )
+    monaco.languages.Languages.registerTypeDefinitionProvider(
+      ScalaLanguageExtensionPoint.id,
+      new ScalaTypeDefinitionProvider(index)
+    )
   }
 
   def openEditor(
