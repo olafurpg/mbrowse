@@ -44,7 +44,7 @@ class ScalaDocumentSymbolProvider(index: Index)
   def symbolKind(denotation: Denotation): Option[SymbolKind] = {
     import denotation._
 
-    if (isPARAM || isTypeParam)
+    if (isParam || isTypeParam)
       None
     else if (isVal || isVar)
       Some(SymbolKind.Variable)

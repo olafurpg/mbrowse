@@ -32,7 +32,7 @@ object IndexLookup {
     for {
       name <- attrs.names.collectFirst {
         case (pos, sym)
-            if pos.start.offset <= offset && offset <= pos.end.offset =>
+            if pos.start <= offset && offset <= pos.end =>
           sym.syntax
       }
       symbol <- index.symbols.find(_.symbol == name)

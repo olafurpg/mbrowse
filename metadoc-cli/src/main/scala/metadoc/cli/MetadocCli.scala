@@ -12,7 +12,7 @@ import scala.meta.internal.io.PathIO
 import caseapp.{Name => _, _}
 import metadoc.{schema => d}
 import better.files._
-import scala.meta.internal.ast.Helpers._
+import scala.meta.internal.trees.XtensionTreesName
 
 @AppName("metadoc")
 @AppVersion("0.1.0-SNAPSHOT")
@@ -35,7 +35,7 @@ case class MetadocSite(
 
 object MetadocCli extends CaseApp[MetadocOptions] {
   def filename(input: Input): String = input match {
-    case Input.LabeledString(path, _) => path
+    case Input.VirtualFile(path, _) => path
     case Input.File(path, _) =>
       path.toRelative(PathIO.workingDirectory).toString()
   }
@@ -43,8 +43,8 @@ object MetadocCli extends CaseApp[MetadocOptions] {
   def metadocPosition(position: Position): d.Position =
     d.Position(
       filename(position.input),
-      start = position.start.offset,
-      end = position.end.offset
+      start = position.start,
+      end = position.end
     )
 
   def getAbsolutePath(path: String): AbsolutePath =
@@ -118,12 +118,11 @@ object MetadocCli extends CaseApp[MetadocOptions] {
     val classpath = Classpath(
       remainingArgs.remainingArgs
         .flatMap(cp => cp.split(File.pathSeparator).map(getAbsolutePath))
+        .toList
     )
     val db = Database.load(classpath)
     val symbols = getSymbols(db)
-    val files = db.entries.collect {
-      case (Input.LabeledString(path, _), _) => path
-    }
+    val files = db.entries.map(x => filename(x.input))
     val index = d.Index(files, symbols.map(_.copy(references = Nil)))
     val site = MetadocSite(classpath.shallow, symbols, index)
     createMetadocSite(site, options)

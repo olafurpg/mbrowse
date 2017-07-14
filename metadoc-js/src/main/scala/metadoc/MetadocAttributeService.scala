@@ -25,7 +25,7 @@ object MetadocAttributeService {
     for {
       bytes <- fetchBytes(url)
     } yield {
-      s.Attributes.parseFrom(bytes)
+      s.Database.parseFrom(bytes).entries.head
     }
   }
 
@@ -34,7 +34,7 @@ object MetadocAttributeService {
       sattrs <- fetchProtoAttributes(filename)
     } yield {
       val db = s.Database(List(sattrs)).toMeta(None)
-      db.entries.head._2
+      db.entries.head
     }
   }
 }

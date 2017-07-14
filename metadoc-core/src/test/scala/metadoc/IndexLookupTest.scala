@@ -1,14 +1,15 @@
 package metadoc
 
 import org.scalatest.FunSuite
-import scala.collection.immutable.Seq
+import scala.collection.immutable.List
 import scala.meta._
 import metadoc.{schema => doc}
 
 class IndexLookupTest extends FunSuite {
   val attrs = Attributes(
+    input = Input.String("aaaaaaa"),
     dialect = dialects.Scala212,
-    names = Seq(
+    names = List(
       (
         Position.Range(Input.String("src/p/C.scala"), 1, 5),
         Symbol.Local("p.C")
@@ -22,30 +23,30 @@ class IndexLookupTest extends FunSuite {
         Symbol.Local("lib.no")
       )
     ),
-    messages = Seq.empty,
-    denotations = Seq.empty,
-    sugars = Seq.empty
+    messages = List.empty,
+    denotations = List.empty,
+    sugars = Map.empty
   )
 
   val cDefinition = Some(doc.Position("src/p/C.scala", 1, 5))
-  val cReferences = Seq(
+  val cReferences = List(
     doc.Position("src/p/C.scala", 20, 25),
     doc.Position("src/p/C.scala", 30, 35)
   )
   val cSymbol = doc.Symbol("p.C", cDefinition, cReferences)
 
   val funDefinition = Some(doc.Position("src/p/C.scala", 6, 10))
-  val funReferences = Seq(doc.Position("src/p/C.scala", 40, 45))
+  val funReferences = List(doc.Position("src/p/C.scala", 40, 45))
   val funSymbol = doc.Symbol("p.fun", funDefinition, funReferences)
 
   val noDefinition = None
-  val noReferences = Seq(doc.Position("src/p/C.scala", 37, 39))
+  val noReferences = List(doc.Position("src/p/C.scala", 37, 39))
   val noSymbol = doc.Symbol("lib.no", noDefinition, noReferences)
 
   val filename = "src/p/C.scala"
   val index = doc.Index(
-    files = Seq(filename),
-    symbols = Seq(cSymbol, funSymbol, noSymbol)
+    files = List(filename),
+    symbols = List(cSymbol, funSymbol, noSymbol)
   )
 
   test("IndexLookup.findSymbol") {
