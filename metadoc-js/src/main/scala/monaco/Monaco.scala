@@ -1134,7 +1134,7 @@ package editor {
     var scrollTop: Double = js.native
   }
 
-//  @js.native
+  // @js.native - NOTE: Non-native to allow extending it in Scala
   trait IActionDescriptor extends js.Object {
     var id: String
     var label: String
