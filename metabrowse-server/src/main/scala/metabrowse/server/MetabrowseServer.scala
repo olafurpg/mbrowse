@@ -37,9 +37,9 @@ import scala.tools.nsc.interactive.Global
 import scala.util.control.NonFatal
 
 class MetabrowseServer(
-    scalacOptions: List[String] = Nil,
-    host: String = "localhost",
-    port: Int = 4000,
+    val scalacOptions: List[String] = Nil,
+    val host: String = "localhost",
+    val port: Int = 4000,
     logger: Logger = LoggerFactory.getLogger("MetabrowseServer")
 ) {
 
